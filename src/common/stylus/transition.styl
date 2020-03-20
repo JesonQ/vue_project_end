@@ -1,0 +1,80 @@
+/*
+  1. vue中的动画 适合于使用v-show 或 v-if 进行元素的显示隐藏操作
+      在使用v-show 或 v-if 进行元素的显示隐藏操作时;我们可以给元素包裹一个transition的组件
+        <transition name="mask">
+          <div v-show="flag"></div>
+        </transition>
+
+      所以vue会在当前这个元素进行显示 隐藏操作时 给它加上6个class
+        从隐藏 --> 显示
+          .mask-enter (在第一帧时运用给当前元素)
+          .mask-enter-active (第二帧到最后动画结束 会一直存在)
+          .mask-enter-to (第二帧到最后动画结束 会一直存在)
+        从显示 --> 隐藏
+          .mask-leave (leave这个class 只是为了api的对称性才定义 其实它没有作用)
+          .mask-leave-active (第二帧到最后动画结束 会一直存在)
+          .mask-leave-to (第二帧到最后动画结束 会一直存在)
+
+  2. css3.0 动画
+      transition(动画的逻辑 一定会有js的参与; 适合复杂的动画)
+          1. transition在元素首次渲染还没有结束的情况下;是不会触发的
+          2. 在transform中使用transition动画时;如果使用的变换函数的位置不一样
+              过渡很有可能失效
+          3. 在transition动画中 我们是没有办法拿到动画执行的每一帧的
+                将动画从transition ---> tween算法 可以拿到动画的每一帧
+      animation(纯css动画;有可能通过js触发)
+
+  3. 所有web中的动画
+      内联元素是没有办法使用动画的
+      并不是所有的css属性可以使用动画的api
+*/
+
+
+
+
+
+//遮罩的过渡动画
+.mask-enter
+  opacity 0 !important
+.mask-enter-active
+  transition .3s opacity linear !important
+.mask-enter-to
+  opacity 1 !important
+.mask-leave
+  opacity 1 !important
+.mask-leave-active
+  transition .3s opacity linear !important
+.mask-leave-to
+  opacity 0 !important
+
+
+
+//1. 并不是所有元素都可以使用动画 (内联元素是用不上动画的)
+//    animation & transtion
+//2. v-leave 這个class在整个vue的过渡是不起作用的
+//     v-leave时 到底处于什么状态  得看元素一开始处于什么位置
+
+//购物车 加减的动画
+//从隐藏 ---> 显示
+.contorlRemove-enter
+  opacity 0 !important
+  transform translateX(48px) rotate(0deg) !important
+.contorlRemove-enter-active
+  transition .3s all linear !important
+.contorlRemove-enter-to
+  opacity 1 !important
+  transform translateX(0px) rotate(-720deg) !important
+
+//   v-leave這個api完全是因为api对的对称性才会存在
+//  所以说.contorlRemove-leave 是沒有用的
+//  从显示 ---> 隐藏
+.contorlRemove-leave
+.contorlRemove-leave-active
+  transition .3s all linear !important
+.contorlRemove-leave-to
+  opacity 0 !important
+  transform translate3d(48px,0,0) rotate(0deg) !important
+
+
+  // translate3d(0,0,0) rotate(-720deg)   -->  translate3d(48px,0,0) rotate(0deg)
+
